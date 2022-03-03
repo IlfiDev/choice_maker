@@ -1,7 +1,3 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import math
 
 
@@ -24,7 +20,6 @@ class TOPSIS:
         self.s_minus = []
         self.performance_score = []
 
-
     def find_best_choice(self):
         self.normalize_matrix()
         self.weights_mux()
@@ -33,14 +28,12 @@ class TOPSIS:
         self.find_distance_to_ideal()
         self.get_performance_score()
 
-
     def normalize_matrix(self):
         div = 0
         for i in range(2, len(self.matrix)):
             denominator = math.sqrt(sum(pow(c, 2) for c in self.matrix[i] if type(c) is not str))
             for j in range(1, len(self.matrix[1])):
                 self.matrix[i][j] = self.matrix[i][j]/denominator
-
 
     def print_matrix(self):
         for cell in self.matrix[0]:
@@ -59,30 +52,26 @@ class TOPSIS:
             print(item, end=" ")
         print()
 
-
     def find_ideal_best_worst(self):
         for i in range(2, len(self.matrix)):
             self.v_plus.append(max(self.matrix[i][1:len(self.matrix[1])]))
             self.v_minus.append(min(self.matrix[i][1:len(self.matrix[1])]))
-
 
     def find_distance_to_ideal(self):
         summa1 = 0
         summa2 = 0
         for i in range(1, len(self.matrix[1])):
             for j in range(2, len(self.matrix)):
-
                 summa1 += pow(self.matrix[j][i] - self.v_plus[j - 2], 2)
                 summa2 += pow(self.matrix[j][i] - self.v_minus[j - 2], 2)
+
             self.s_plus.append(math.sqrt(summa1))
             self.s_minus.append(math.sqrt(summa2))
             summa1 = 0
             summa2 = 0
+
         print(self.s_plus)
         print(self.s_minus)
-
-
-
 
     def get_performance_score(self):
         for i in range(len(self.s_plus)):
@@ -95,17 +84,13 @@ class TOPSIS:
             print(str(self.matrix[1][max_index + 1]) + " - " + str(max_elem))
             performance_score_copy[max_index] = -1
 
-
     def weights_mux(self):
         for i in range(2, len(self.matrix)):
             for j in range(1, len(self.matrix[2])):
                 self.matrix[i][j] = self.matrix[i][j] * self.matrix[0][i - 1]
 
 
-
 if __name__ == '__main__':
     phones = TOPSIS(matrix)
     phones.find_best_choice()
 
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
