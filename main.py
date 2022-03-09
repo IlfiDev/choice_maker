@@ -7,7 +7,7 @@ matrix = [["weightage", 0.25, 0.25, 0.25, 0.25],
           ["phone 3", 300, 32, 16, 4],
           ["phone 4", 275, 32, 8, 4],
           ["phone 5", 225, 16, 16, 2]]
-
+#comment
 
 if __name__ == '__main__':
     phones = TOPSIS(matrix)
