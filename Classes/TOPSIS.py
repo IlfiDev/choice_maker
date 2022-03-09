@@ -1,4 +1,5 @@
 import math
+from tabulate import tabulate
 
 
 class TOPSIS:
@@ -20,60 +21,52 @@ class TOPSIS:
         self.get_performance_score()
 
     def normalize_matrix(self):
-        div = 0
-        for i in range(2, len(self.matrix)):
-            denominator = math.sqrt(sum(pow(c, 2) for c in self.matrix[i] if type(c) is not str))
-            for j in range(1, len(self.matrix[1])):
+        for j in range(1, len(self.matrix[0])):
+            sum_of_pow = 0
+            for i in range(2, len(self.matrix)):
+                sum_of_pow += pow(self.matrix[i][j], 2)
+            denominator = math.sqrt(sum_of_pow)
+            for i in range(2, len(self.matrix)):
                 self.matrix[i][j] = self.matrix[i][j]/denominator
 
-    def print_matrix(self):
-        for cell in self.matrix[0]:
-            print(cell, end=" ")
-        print()
-        for i in range(0, len(self.matrix[1])):
-            for j in range(1, len(self.matrix)):
-                print(self.matrix[j][i], end=" ")
-            print()
-        print("V-", end=" ")
-        for item in self.v_minus:
-            print(item, end=" ")
-        print()
-        print("V+", end=" ")
-        for item in self.v_plus:
-            print(item, end=" ")
-        print()
+    def weights_mux(self):
+        for j in range(1, len(self.matrix[0])):
+            for i in range(2, len(self.matrix)):
+                self.matrix[i][j] = self.matrix[i][j] * self.matrix[0][j]
 
     def find_ideal_best_worst(self):
-        for i in range(2, len(self.matrix)):
-            self.v_plus.append(max(self.matrix[i][1:len(self.matrix[1])]))
-            self.v_minus.append(min(self.matrix[i][1:len(self.matrix[1])]))
+        for j in range(1, len(self.matrix[0])):
+            row = [self.matrix[c][j] for c in range(2, len(self.matrix))]
+            if "*" in self.matrix[1][j]:
+                self.v_plus.append(min(row))
+                self.v_minus.append(max(row))
+            else:
+                self.v_plus.append(max(row))
+                self.v_minus.append(min(row))
 
     def find_distance_to_ideal(self):
-        summa1 = 0
-        summa2 = 0
-        for i in range(1, len(self.matrix[1])):
-            for j in range(2, len(self.matrix)):
-                summa1 += pow(self.matrix[j][i] - self.v_plus[j - 2], 2)
-                summa2 += pow(self.matrix[j][i] - self.v_minus[j - 2], 2)
-            self.s_plus.append(math.sqrt(summa1))
-            self.s_minus.append(math.sqrt(summa2))
-            summa1 = 0
-            summa2 = 0
-        print(self.s_plus)
-        print(self.s_minus)
+        for i in range(2, len(self.matrix)):
+            self.s_plus.append(math.sqrt(sum([pow(
+                self.matrix[i][c] - self.v_plus[c - 1], 2) for c in range(
+                    1, len(self.matrix[0]))])))
+            self.s_minus.append(math.sqrt(sum([pow(
+                self.matrix[i][c] - self.v_minus[c - 1], 2) for c in range(
+                    1, len(self.matrix[0]))])))
 
     def get_performance_score(self):
         for i in range(len(self.s_plus)):
             self.performance_score.append(self.s_minus[i]/(self.s_plus[i] + self.s_minus[i]))
-
         performance_score_copy = self.performance_score
+        counter = 1
         for i in range(len(performance_score_copy)):
             max_elem = max(performance_score_copy)
             max_index = performance_score_copy.index(max_elem)
-            print(str(self.matrix[1][max_index + 1]) + " - " + str(max_elem))
+            print(str(counter) + " - " + str(self.matrix[max_index + 2][0]) + " - " + str(max_elem))
             performance_score_copy[max_index] = -1
+            counter += 1
 
-    def weights_mux(self):
-        for i in range(2, len(self.matrix)):
-            for j in range(1, len(self.matrix[2])):
-                self.matrix[i][j] = self.matrix[i][j] * self.matrix[0][i - 1]
+    def print_matrix(self):
+        print(tabulate(
+            [j for j in [
+                i for i in
+                self.matrix[1:len(self.matrix)]]], headers=self.matrix[0]))
