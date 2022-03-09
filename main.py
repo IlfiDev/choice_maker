@@ -1,13 +1,12 @@
 from Classes.TOPSIS import TOPSIS
 
 matrix = [["weightage", 0.25, 0.25, 0.25, 0.25],
-          ["names", "name1", "name2", "name3", "name4", "name5"],
-          ["price", 250, 200, 300, 275, 225],
-          ["storage", 16, 16, 32, 32, 16],
-          ["Camera", 12, 8, 16, 8, 16],
-          ["Looks", 5, 3, 4, 4, 2]]
-
-
+          ["names", "*price", "storage", "Camera", "Look"],
+          ["phone 1", 250, 16, 12, 5],
+          ["phone 2", 200, 16, 8, 3],
+          ["phone 3", 300, 32, 16, 4],
+          ["phone 4", 275, 32, 8, 4],
+          ["phone 5", 225, 16, 16, 2]]
 
 
 if __name__ == '__main__':
