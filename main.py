@@ -1,6 +1,7 @@
 from Classes.TOPSIS import TOPSIS
+from Classes.WASPAS import WASPAS
 
-matrix = [["weightage", 0.25, 0.25, 0.25, 0.25],
+my_matrix = [["weightage", 0.25, 0.25, 0.25, 0.25],
           ["names", "*price", "storage", "Camera", "Look"],
           ["phone 1", 250, 16, 12, 5],
           ["phone 2", 200, 16, 8, 3],
@@ -10,6 +11,8 @@ matrix = [["weightage", 0.25, 0.25, 0.25, 0.25],
 #new comment
 
 if __name__ == '__main__':
-    phones = TOPSIS(matrix)
+    phones = TOPSIS(my_matrix)
     phones.find_best_choice()
+    phones = WASPAS(my_matrix, 0.5)
+    phones.find_best_option()
 
