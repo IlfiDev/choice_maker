@@ -1,3 +1,4 @@
+import copy
 import math
 from tabulate import tabulate
 
@@ -5,7 +6,7 @@ from tabulate import tabulate
 class TOPSIS:
 
     def __init__(self, matrix):
-        self.matrix = matrix
+        self.matrix = copy.deepcopy(matrix)
         self.v_plus = []
         self.v_minus = []
         self.s_plus = []
