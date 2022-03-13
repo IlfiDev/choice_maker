@@ -27,7 +27,10 @@ class TOPSIS:
                 sum_of_pow += pow(self.matrix[i][j], 2)
             denominator = math.sqrt(sum_of_pow)
             for i in range(2, len(self.matrix)):
-                self.matrix[i][j] = self.matrix[i][j]/denominator
+                if "*" in self.matrix[1][j]:
+                    self.matrix[i][j] = 1 - self.matrix[i][j]/denominator
+                else:
+                    self.matrix[i][j] = self.matrix[i][j]/denominator
 
     def weights_mux(self):
         for j in range(1, len(self.matrix[0])):
@@ -37,12 +40,8 @@ class TOPSIS:
     def find_ideal_best_worst(self):
         for j in range(1, len(self.matrix[0])):
             row = [self.matrix[c][j] for c in range(2, len(self.matrix))]
-            if "*" in self.matrix[1][j]:
-                self.v_plus.append(min(row))
-                self.v_minus.append(max(row))
-            else:
-                self.v_plus.append(max(row))
-                self.v_minus.append(min(row))
+            self.v_plus.append(max(row))
+            self.v_minus.append(min(row))
 
     def find_distance_to_ideal(self):
         for i in range(2, len(self.matrix)):
