@@ -1,4 +1,6 @@
 import copy
+import math
+
 from tabulate import tabulate
 
 class WSM:
@@ -12,7 +14,7 @@ class WSM:
         self.get_performance_score()
 
 
-    def normalize_matrix(self):
+    def normalize_matrix2(self):
         for j in range(1, len(self.matrix[0])):
             row = [self.matrix[c][j] for c in range(2, len(self.matrix))]
             for i in range(2, len(self.matrix)):
@@ -20,6 +22,17 @@ class WSM:
                     self.matrix[i][j] = min(row) / self.matrix[i][j]
                 else:
                     self.matrix[i][j] = self.matrix[i][j] / max(row)
+    def normalize_matrix(self):
+        for j in range(1, len(self.matrix[0])):
+            sum_of_pow = 0
+            for i in range(2, len(self.matrix)):
+                sum_of_pow += pow(self.matrix[i][j], 2)
+            denominator = math.sqrt(sum_of_pow)
+            for i in range(2, len(self.matrix)):
+                if "*" in self.matrix[1][j]:
+                    self.matrix[i][j] = 1 - self.matrix[i][j]/denominator
+                else:
+                    self.matrix[i][j] = self.matrix[i][j]/denominator
 
     def calculate_performance_score(self):
         wsm = copy.deepcopy(self.matrix)

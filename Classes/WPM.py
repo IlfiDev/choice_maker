@@ -1,4 +1,6 @@
 import copy
+import math
+
 from tabulate import tabulate
 
 class WPM:
@@ -11,15 +13,29 @@ class WPM:
         self.calculate_wpm_performance_score()
         self.get_performance_score()
 
-    def normalize_matrix(self):
+    def normalize_matrix2(self):
         for j in range(1, len(self.matrix[0])):
             row = [self.matrix[c][j] for c in range(2, len(self.matrix))]
             for i in range(2, len(self.matrix)):
                 if "*" in self.matrix[1][j]:
-                    self.matrix[i][j] = min(row) / self.matrix[i][j]
+                    if self.matrix[i][j] == 0:
+                        self.matrix = min(row)
+                    else:
+                        self.matrix[i][j] = min(row) / self.matrix[i][j]
                 else:
                     self.matrix[i][j] = self.matrix[i][j] / max(row)
 
+    def normalize_matrix(self):
+        for j in range(1, len(self.matrix[0])):
+            sum_of_pow = 0
+            for i in range(2, len(self.matrix)):
+                sum_of_pow += pow(self.matrix[i][j], 2)
+            denominator = math.sqrt(sum_of_pow)
+            for i in range(2, len(self.matrix)):
+                if "*" in self.matrix[1][j]:
+                    self.matrix[i][j] = 1 - self.matrix[i][j]/denominator
+                else:
+                    self.matrix[i][j] = self.matrix[i][j]/denominator
 
     def calculate_wpm_performance_score(self):
         wpm = copy.deepcopy(self.matrix)
@@ -29,7 +45,10 @@ class WPM:
         for i in range(2, len(wpm)):
             product = 1
             for j in range(1, len(wpm[0])):
-                product *= wpm[i][j]
+                if wpm[i][j] == 0:
+                    product *= 1
+                else:
+                    product *= wpm[i][j]
             self.wpm_performance_score.append(product)
 
     def get_performance_score(self):
