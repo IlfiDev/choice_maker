@@ -5,7 +5,7 @@ from tabulate import tabulate
 class WASPAS:
 
     def __init__(self, matrix, joined_generalized_criteria):
-        self.matrix = matrix
+        self.matrix = copy.deepcopy(matrix)
         self.wsm_performance_score = []
         self.wpm_performance_score = []
         self.performance_score = []
