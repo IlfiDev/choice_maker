@@ -17,7 +17,6 @@ class TOPSIS:
         self.normalize_matrix()
         self.weights_mux()
         self.find_ideal_best_worst()
-        self.print_matrix()
         self.find_distance_to_ideal()
         self.get_performance_score()
 
